@@ -1,5 +1,6 @@
 package com.gplibs.magicsurfaceview;
 
+import android.util.Log;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -43,6 +44,8 @@ public class MagicSceneBuilder {
     public MagicScene build() {
         final String v = buildVertexShaderSource();
         final String f = buildFragmentShaderSource();
+        Log.d("MagicSceneBuilder", "ver=" + v);
+        Log.d("MagicSceneBuilder", "fragment=" + f);
         mScene.init(v, f);
         return mScene;
     }
@@ -95,7 +98,8 @@ public class MagicSceneBuilder {
         sb.append("vec3 normalTarget = a_position + normal;");
         sb.append("vec3 vecNormal = normalize((u_m_matrix * vec4(normalTarget, 1)).xyz - newPos);");
         sb.append("vec3 vecEye = normalize(u_camera - newPos);");
-        sb.append("vec3 vecLight = normalize(isPointLight ? (lightLocOrDir - newPos) : lightLocOrDir * vec3(-1, -1, -1));");
+        sb.append(
+            "vec3 vecLight = normalize(isPointLight ? (lightLocOrDir - newPos) : lightLocOrDir * vec3(-1, -1, -1));");
         sb.append("diffuse_color(vecNormal, vecLight, lightColor, diffuse);");
         sb.append("specular_color(vecNormal, vecLight, vecEye, shininess, lightColor, specular);");
         sb.append("}");
@@ -181,7 +185,9 @@ public class MagicSceneBuilder {
         sb.append("gl_FragColor = c;");
         sb.append("}");
         return sb.toString();
-    };
+    }
+
+    ;
 
     private String createFragmentShaderParams() {
         StringBuilder sb = new StringBuilder();
